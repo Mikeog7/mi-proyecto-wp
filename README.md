@@ -1,0 +1,1 @@
+El tema se monta en el contenedor mediante un bind mount (./themes/mi-tema:/var/www/html/wp-content/themes/mi-tema). Docker no copia los archivos: los comparte directamente con el host, por lo que cualquier cambio guardado en local se refleja al instante en el contenedor, sin reconstruir la imagen.
