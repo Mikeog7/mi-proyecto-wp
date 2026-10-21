@@ -1,0 +1,75 @@
+/*
+Theme Name: Mi Tema
+Theme URI: https://ejemplo.com
+Author: Tu Nombre
+Description: Tema propio responsivo para el equipo de Presencia Web
+Version: 1.0
+License: GNU General Public License v2 or later
+Text Domain: mi-tema
+*/
+
+:root {
+  --color-primary: #2563eb;
+  --color-text: #1f2937;
+  --color-bg: #f9fafb;
+  --max-width: 1100px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.site-header {
+  background: var(--color-primary);
+  color: #fff;
+  padding: 1rem 0;
+}
+
+.site-header .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-header a { color: #fff; text-decoration: none; }
+
+.posts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 2rem 0;
+}
+
+.post-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  overflow-wrap: break-word;
+}
+
+/* Tablet */
+@media (min-width: 640px) {
+  .posts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Escritorio */
+@media (min-width: 1024px) {
+  .posts-grid { grid-template-columns: repeat(3, 1fr); }
+}
