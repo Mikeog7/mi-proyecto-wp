@@ -230,3 +230,89 @@ a:focus-visible, .btn:focus-visible {
 .entry-content p { margin-bottom: 1rem; }
 
 .entry-content a { color: var(--color-primary); }
+
+
+/* Widgets del footer */
+.site-footer { text-align: left; }
+
+.footer-widgets {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  padding-top: 2.5rem;
+  padding-bottom: 2rem;
+}
+
+.footer-col { overflow-wrap: break-word; }
+
+.widget { margin-bottom: 1.5rem; }
+
+.widget-title {
+  color: #fff;
+  font-size: 1.05rem;
+  margin-bottom: .75rem;
+}
+
+.widget ul { list-style: none; }
+.widget li { margin-bottom: .4rem; }
+
+.site-footer a { color: #c7d2fe; text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.12);
+  padding-top: 1.25rem;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .footer-widgets { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* Contenido de páginas y entradas */
+.entry { margin: 0; }
+
+.entry-header { padding-top: 2rem; padding-bottom: 1rem; }
+
+.entry-title {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--color-primary-dark);
+}
+
+.entry-meta { color: var(--color-muted); font-size: .9rem; }
+
+.entry-content { padding-bottom: 3rem; }
+
+/* Los bloques normales van centrados y legibles... */
+.entry-content > * {
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.entry-content > * + * { margin-top: 1.25rem; }
+
+/* ...los anchos y completos rompen ese límite */
+.entry-content > .alignwide {
+  max-width: var(--max-width);
+}
+
+.entry-content > .alignfull {
+  max-width: none;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.alignleft  { float: left;  margin: 0 1.5rem 1rem 0; }
+.alignright { float: right; margin: 0 0 1rem 1.5rem; }
+.aligncenter { margin-left: auto; margin-right: auto; }
+
+.entry-content::after { content: ""; display: block; clear: both; }
+
+.entry-content a { color: var(--color-primary); }
+
+/* Plantilla ancho completo */
+.site-main--full .entry-content { padding-bottom: 0; }

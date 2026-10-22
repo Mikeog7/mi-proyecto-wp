@@ -34,6 +34,8 @@ services:
     volumes:
       - wp_data:/var/www/html
       - ./themes/mi-tema:/var/www/html/wp-content/themes/mi-tema
+    env_file:
+      - .env
 
 volumes:
   db_data:
