@@ -17,7 +17,10 @@ services:
       retries: 5
 
   wordpress:
-    build: .
+    build:
+      context: .
+      args:
+        THEME_NAME: ${THEME_NAME}
     container_name: wp_app
     restart: unless-stopped
     depends_on:
@@ -32,11 +35,11 @@ services:
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG}
     volumes:
-      - wp_data:/var/www/html
-      - ./themes/mi-tema:/var/www/html/wp-content/themes/mi-tema
+      - uploads:/var/www/html/wp-content/uploads
     env_file:
       - .env
 
 volumes:
   db_data:
-  wp_data:
+  uploads:
+  
