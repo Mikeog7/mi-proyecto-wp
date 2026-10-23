@@ -18,7 +18,7 @@ docker compose version
 ## Instalacion
 
 ```bash
-git clone https://github.com/tu-usuario/mi-proyecto-wp.git
+git clone https://github.com/michael.crespo/mi-proyecto-wp.git
 cd mi-proyecto-wp
 cp .env.example .env
 ```
@@ -38,19 +38,34 @@ La primera vez tarda unos minutos porque descarga las imagenes.
 
 Al entrar por primera vez se mostrara el asistente de instalacion de WordPress. Una vez completado, ve a Apariencia => Temas y activa Mi Tema.
 
-> Las entradas, paginas, menus y el usuario administrador se guardan en la base de datos (volumen de Docker) y "no" se incluyen en el repositorio. Cada instalacion nueva empieza vacia.
+> Las entradas, paginas, menus y el usuario administrador se guardan en la base de datos (volumen de Docker) y "no" se incluyen en el repositorio. Cada instalacion nueva empieza vacia.    
 
 ## Desarrollo
 
-El tema esta en `themes/mi-tema/` y se monta en el contenedor mediante un *bind mount*:
+El tema se copia dentro de la imagen de Docker al construirla, mediante `COPY` y un argumento `THEME_NAME` definido en el `Dockerfile`:
 
-```yaml
-- ./themes/mi-tema:/var/www/html/wp-content/themes/mi-tema
+```dockerfile
+ARG THEME_NAME=mi-tema
+COPY themes/${THEME_NAME} /usr/src/wordpress/wp-content/themes/${THEME_NAME}
 ```
 
-Docker no copia los archivos, los comparte con tu equipo. Cualquier cambio que guardes se refleja al recargar el navegador, sin reconstruir ni reiniciar nada.
+El nombre del tema se define en el archivo `.env` (`THEME_NAME=mi-tema`) y `docker-compose.yaml` se lo pasa al Dockerfile con `build.args`. El valor debe coincidir con el nombre de la carpeta dentro de `themes/`.
 
-El modo debug esta activado (`WORDPRESS_DEBUG=1`), por lo que los errores de PHP se muestran en pantalla y en los logs.
+**Los cambios ya no se ven en vivo.** Tras editar archivos del tema hay que reconstruir la imagen:
+
+```bash
+docker compose up -d --build
+```
+
+Después recarga el navegador con Ctrl+Shift+R.
+
+Para usar otro tema sin tocar el `.env`:
+
+```bash
+THEME_NAME=otro-tema docker compose up -d --build
+```
+
+El modo debug está activado (`WORDPRESS_DEBUG=1`), por lo que los errores de PHP se muestran en pantalla y en los logs.
 
 ## Estructura del proyecto
 
@@ -155,3 +170,27 @@ La maquina virtual virtualiza el **hardware**; el contenedor virtualiza el **sis
 | Cambios en `.env` no se aplican | `docker compose down -v` y levantar de nuevo (MySQL solo lee las variables al crear el volumen) |
 | El tema no aparece | Comprueba que `style.css` tiene la cabecera `Theme Name` |
 | Los estilos no se actualizan | Recarga forzada (Ctrl+Shift+R) |
+
+## Volúmenes
+
+| Volumen | Qué guarda |
+|---|---|
+| `db_data` | La base de datos MySQL (páginas, entradas, widgets, usuarios) |
+| `uploads` | Las imágenes y archivos subidos desde el panel |
+
+El código del tema **no** usa volumen: viene de la imagen. Por eso no se monta `/var/www/html` completo, ya que un volumen ahí taparía el tema copiado y no se actualizaría al reconstruir.
+
+## Características del tema
+
+### Widgets
+
+El tema registra **3 zonas de widgets** en el pie de página (*Pie de página - Columna 1, 2 y 3*). Se gestionan desde **Apariencia → Widgets** y se muestran en 3 columnas en escritorio y 1 en móvil. Las zonas vacías no se pintan.
+
+### Páginas con diseño propio
+
+El tema no impone una plantilla plana: el contenido de cada página lo define el editor de bloques.
+
+- `page.php` y `single.php` muestran el contenido completo con `the_content()`.
+- Soporte de bloques: ancho amplio y completo (`align-wide`), estilos de bloques y editor con los estilos del tema.
+- Plantilla opcional **Ancho completo (sin título)**, seleccionable en *Página → Plantilla*.
+- Los bloques normales se centran a 720 px; los de ancho amplio llegan a 1100 px y los de ancho completo ocupan toda la pantalla.
